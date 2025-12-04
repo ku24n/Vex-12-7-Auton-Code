@@ -137,8 +137,6 @@ def autonomous():
     # if time + to column vvv
 
 def user_control():
-    
-
     brain.screen.clear_screen()
     brain.screen.print("driver control")
     # place driver control in this while loop
@@ -175,9 +173,13 @@ def user_control():
 
         wait(20, MSEC)
 # create competition instance
-comp = Competition(user_control, autonomous)
+# comp = Competition(user_control, autonomous)
 
 # actions to do when the program starts
 brain.screen.clear_screen()
 
-autonomous() # remove at comp
+def a():
+    drive_train.drive_for(FORWARD, 10, INCHES)
+    drive_train.turn_for(RIGHT, 90, DEGREES)
+    
+a() # remove at comp
