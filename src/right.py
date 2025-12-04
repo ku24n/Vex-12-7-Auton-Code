@@ -16,6 +16,7 @@ from vex import *
 
 #variables
 e_brake_is_up = False
+descorer_is_up = False
 match_loader_is_up = False
 
 # intializations
@@ -25,7 +26,7 @@ drive_train_intertial = Inertial(Ports.PORT19) # intertial sensor
 
 # pneumatics
 e_brake = DigitalOut(brain.three_wire_port.a) # e brake wheel
-# descorer = DigitalOut(brain.three_wire_port.b) 
+descorer = DigitalOut(brain.three_wire_port.b) 
 match_loader = DigitalOut(brain.three_wire_port.c)
 
 #distance sensors
@@ -46,7 +47,7 @@ right_motor_b = Motor(Ports.PORT1) # right back motor
 # define drive train
 left_motor_group = MotorGroup(left_motor_a, left_motor_b)
 right_motor_group = MotorGroup(right_motor_a, right_motor_b)
-drive_train = SmartDrive(left_motor_group, right_motor_group, drive_train_intertial)
+drive_train = SmartDrive(left_motor_group, right_motor_group, drive_train_intertial, 250, 300, 100, MM, 6)
 
 # functions
 def intake(): # start intake
@@ -91,6 +92,14 @@ def match_loader_up():
 def match_loader_down():
     match_loader.set(False)
     match_loader_is_up = True
+
+def descorer_up():
+    descorer.set(True)
+    descorer_is_up = True
+
+def descorer_down():
+    descorer.set(False)
+    descorer_is_up = False
 
 # main functions
 
@@ -150,6 +159,11 @@ def user_control():
             controller.buttonUp.pressed(e_brake_down)
         elif not e_brake_is_up:
             controller.buttonUp.pressed(e_brake_up)
+
+        if descorer_is_up:
+            controller.buttonL2.pressed(descorer_down)
+        elif not descorer_is_up:
+            controller.buttonL2.pressed(descorer_up)
 
         if match_loader_is_up: # map match loader functions to one button
             controller.buttonDown.pressed(match_loader_down)
